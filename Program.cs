@@ -32,8 +32,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     }
 });
 
-builder.Services.AddControllersWithViews()
-    .AddRazorRuntimeCompilation();
+var mvcBuilder = builder.Services.AddControllersWithViews();
+if (builder.Environment.IsDevelopment())
+    mvcBuilder.AddRazorRuntimeCompilation();
 
 builder.Services.AddSingleton<PdfGenerator>();
 
