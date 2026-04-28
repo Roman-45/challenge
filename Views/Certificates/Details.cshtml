@@ -1,0 +1,147 @@
+@model CertificateOfAttendance
+@{
+    ViewData["Title"] = "Certificate Details";
+}
+
+<div class="page-head">
+    <div>
+        <h1 class="page-head-title">Certificate Details</h1>
+        <p class="page-head-sub">Student ID: @Model.StudentID</p>
+    </div>
+    <div class="head-btns">
+        <a asp-action="Index" class="btn btn--outline">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Dashboard
+        </a>
+        <a asp-action="Edit" asp-route-studentId="@Model.StudentID" class="btn btn--outline">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Edit
+        </a>
+        <a asp-action="PreviewPdf" asp-route-studentId="@Model.StudentID" class="btn btn--outline" target="_blank">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+            Preview PDF
+        </a>
+        <a asp-action="DownloadPdf" asp-route-studentId="@Model.StudentID" class="btn btn--primary" target="_blank">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Download PDF
+        </a>
+    </div>
+</div>
+
+<div class="detail-grid">
+    <!-- Left: Data panels -->
+    <div class="detail-panels">
+        <div class="panel">
+            <h3 class="panel-title">Student Information</h3>
+            <dl class="dl">
+                <dt>Full Name</dt><dd>@Model.StudentName</dd>
+                <dt>Date of Birth</dt><dd>@Model.FormattedBirthDate</dd>
+                <dt>Student ID</dt><dd class="mono">@Model.StudentID</dd>
+                <dt>Status</dt><dd><span class="pill pill--@Model.Status?.ToLower()">@Model.Status</span></dd>
+            </dl>
+        </div>
+
+        <div class="panel">
+            <h3 class="panel-title">Academic Details</h3>
+            <dl class="dl">
+                <dt>Faculty</dt><dd>@Model.Faculty</dd>
+                <dt>Major</dt><dd>@Model.Major</dd>
+                <dt>Year / Semester</dt><dd>@Model.Year</dd>
+                <dt>Academic Year</dt><dd>@Model.AcademicYear</dd>
+                <dt>Studied From</dt><dd>@Model.StudiedFrom</dd>
+                <dt>Studied To</dt><dd>@Model.DisplayStudiedTo</dd>
+            </dl>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.Comment))
+        {
+            <div class="panel">
+                <h3 class="panel-title">Comment</h3>
+                <p class="comment-txt">@Model.Comment</p>
+            </div>
+        }
+
+        <div class="panel">
+            <h3 class="panel-title">Authorization</h3>
+            <dl class="dl">
+                <dt>Approved By</dt><dd>@Model.ApprovedBy</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Right: A4 Certificate Preview (mimics actual certificate) -->
+    <div class="preview-sticky">
+        <div class="cert-a4">
+            <!-- Letterhead banner -->
+            <img src="~/images/letterhead.jpg" alt="AUCA Letterhead" class="a4-letterhead" />
+
+            <!-- Contact info -->
+            <div class="a4-contact">
+                Mobile Phone : (+250)724 796 996 / 724 474 805/ 788 473 035
+            </div>
+            <div class="a4-contact">
+                Email: registrar&#64;auca.ac.rw, || juvenal.nsengiyumva&#64;auca.ac.rw
+            </div>
+
+            <hr class="a4-hr" />
+
+            <!-- Date (left) -->
+            <div class="a4-date-left">Kigali, @DateTime.Now.ToString("MMMM d, yyyy")</div>
+
+            <!-- Title -->
+            <h2 class="a4-title">CERTIFICATE OF GOOD STANDING</h2>
+
+            <!-- Body -->
+            <p class="a4-para">
+                I, the undersigned, @Model.ApprovedBy, Director for Admissions
+                and Academic Records of the Adventist University of Central Africa,
+                hereby certify that:
+            </p>
+
+            <div class="a4-student"><u>@Model.StudentName</u>,</div>
+
+            <p class="a4-para">Born on <strong>@Model.FormattedBirthDate</strong></p>
+            <p class="a4-para">
+                has been a regular student of this University, registered under ID No.
+                <strong>@Model.StudentID</strong>,
+            </p>
+            <p class="a4-para">
+                From <strong>@Model.StudiedFrom</strong> to <strong>@Model.DisplayStudiedTo</strong>.
+            </p>
+
+            <p class="a4-para">Year: <strong>@Model.Year</strong></p>
+            <p class="a4-para">Faculty: <strong>@Model.Faculty</strong></p>
+            <p class="a4-para">Major: <strong>@Model.Major</strong></p>
+            <p class="a4-para">Academic year: <strong>@Model.AcademicYear</strong></p>
+            <p class="a4-para">Validity: <strong>@Model.CertificateValidity</strong></p>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Comment))
+            {
+                <p class="a4-comment">@Model.Comment</p>
+            }
+
+            <p class="a4-purpose">This certificate is issued for any legal or administrative purpose it may serve</p>
+
+            <!-- Signature (left) + QR (right) -->
+            <div class="a4-bottom-row">
+                <div class="a4-sig-block">
+                    <img src="~/images/signature.png" alt="Signature" class="a4-sig-img" />
+                    <div class="a4-sig-line"></div>
+                    <div class="a4-sig-name">@Model.ApprovedBy</div>
+                    <div class="a4-sig-role"><strong>Director for Admissions and Academic Records</strong></div>
+                    <div class="a4-sig-inst">Adventist University of Central Africa</div>
+                </div>
+                <div class="a4-qr-block">
+                    <img src="~/images/qr.png" alt="QR Code" class="a4-qr-img" />
+                    <div class="a4-qr-label">Scan to verify my<br />Validity</div>
+                </div>
+            </div>
+        </div>
+
+        <a asp-action="DownloadPdf" asp-route-studentId="@Model.StudentID"
+           class="btn btn--primary btn--full" target="_blank">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Download Official PDF
+        </a>
+    </div>
+</div>

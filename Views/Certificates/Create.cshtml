@@ -1,0 +1,185 @@
+@model CertificateOfAttendance
+@{
+    ViewData["Title"] = "New Certificate";
+}
+
+<div class="page-head">
+    <div>
+        <h1 class="page-head-title">New Certificate</h1>
+        <p class="page-head-sub">Fill in the student details to generate a Certificate of Good Standing</p>
+    </div>
+    <a asp-action="Index" class="btn btn--outline">
+        <svg viewBox="0 0 24 24" class="ic"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back
+    </a>
+</div>
+
+<div class="card">
+    <form asp-action="Create" method="post" id="certForm">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="form-errors"></div>
+
+        <!-- Step indicators -->
+        <div class="steps">
+            <div class="step step--active" data-step="1">
+                <span class="step-num">1</span>
+                <span class="step-label">Student Info</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="2">
+                <span class="step-num">2</span>
+                <span class="step-label">Academics</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" data-step="3">
+                <span class="step-num">3</span>
+                <span class="step-label">Administration</span>
+            </div>
+        </div>
+
+        <!-- Step 1: Student Information -->
+        <fieldset class="fieldset step-panel step-panel--active" id="step1">
+            <legend class="fieldset-legend">Student Information</legend>
+            <div class="field-grid">
+                <div class="field field--span2">
+                    <label asp-for="StudentName" class="field-label"></label>
+                    <input asp-for="StudentName" class="field-input" placeholder="e.g. TUYIZERE Dieudonne" autocomplete="off" />
+                    <span asp-validation-for="StudentName" class="field-err"></span>
+                </div>
+                <div class="field">
+                    <label asp-for="BornDate" class="field-label"></label>
+                    <input asp-for="BornDate" type="text" class="field-input datepicker" placeholder="Select date of birth" autocomplete="off" />
+                    <span asp-validation-for="BornDate" class="field-err"></span>
+                </div>
+                <div class="field">
+                    <label asp-for="StudentID" class="field-label"></label>
+                    <input asp-for="StudentID" class="field-input" placeholder="e.g. 2025SEN349" autocomplete="off" />
+                    <span asp-validation-for="StudentID" class="field-err"></span>
+                </div>
+            </div>
+            <div class="step-nav">
+                <span></span>
+                <button type="button" class="btn btn--primary" onclick="goStep(2)">
+                    Next: Academics
+                    <svg viewBox="0 0 24 24" class="ic"><path d="M14 5l7 7m0 0l-7 7m7-7H3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+        </fieldset>
+
+        <!-- Step 2: Academic Details -->
+        <fieldset class="fieldset step-panel" id="step2">
+            <legend class="fieldset-legend">Academic Details</legend>
+            <div class="field-grid">
+                <div class="field">
+                    <label asp-for="Faculty" class="field-label"></label>
+                    <div class="field-select-wrap">
+                        <select asp-for="Faculty" class="field-input field-select">
+                            <option value="">-- Select Faculty --</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Business Administration">Business Administration</option>
+                            <option value="Education">Education</option>
+                            <option value="Theology">Theology</option>
+                            <option value="Health Sciences">Health Sciences</option>
+                            <option value="Science">Science</option>
+                        </select>
+                        <svg viewBox="0 0 24 24" class="sel-arrow"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <span asp-validation-for="Faculty" class="field-err"></span>
+                </div>
+                <div class="field">
+                    <label asp-for="Major" class="field-label"></label>
+                    <input asp-for="Major" class="field-input" placeholder="e.g. Software Engineering" />
+                    <span asp-validation-for="Major" class="field-err"></span>
+                </div>
+                <div class="field">
+                    <label asp-for="Year" class="field-label"></label>
+                    <div class="field-select-wrap">
+                        <select asp-for="Year" class="field-input field-select">
+                            <option value="">-- Select Year --</option>
+                            <option value="One (Semester 1)">Year 1 - Semester 1</option>
+                            <option value="One (Semester 2)">Year 1 - Semester 2</option>
+                            <option value="Two (Semester 1)">Year 2 - Semester 1</option>
+                            <option value="Two (Semester 2)">Year 2 - Semester 2</option>
+                            <option value="Three (Semester 1)">Year 3 - Semester 1</option>
+                            <option value="Three (Semester 2)">Year 3 - Semester 2</option>
+                            <option value="Four (Semester 1)">Year 4 - Semester 1</option>
+                            <option value="Four (Semester 2)">Year 4 - Semester 2</option>
+                        </select>
+                        <svg viewBox="0 0 24 24" class="sel-arrow"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                </div>
+                <div class="field">
+                    <label asp-for="AcademicYear" class="field-label"></label>
+                    <div class="field-select-wrap">
+                        <select asp-for="AcademicYear" class="field-input field-select">
+                            <option value="">-- Select Academic Year --</option>
+                            <option value="2024-2025 (September 2024 - August 2025)">2024-2025</option>
+                            <option value="2025-2026 (September 2025 - August 2026)" selected>2025-2026</option>
+                            <option value="2026-2027 (September 2026 - August 2027)">2026-2027</option>
+                        </select>
+                        <svg viewBox="0 0 24 24" class="sel-arrow"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                </div>
+                <div class="field">
+                    <label asp-for="StudiedFrom" class="field-label"></label>
+                    <input asp-for="StudiedFrom" type="text" class="field-input monthpicker" placeholder="Select start month" autocomplete="off" />
+                </div>
+                <div class="field">
+                    <label asp-for="StudiedTo" class="field-label"></label>
+                    <input asp-for="StudiedTo" type="text" class="field-input monthpicker" placeholder="Leave empty for 'Date'" autocomplete="off" />
+                    <span class="field-hint">Leave blank if student is still enrolled</span>
+                </div>
+            </div>
+            <div class="step-nav">
+                <button type="button" class="btn btn--outline" onclick="goStep(1)">
+                    <svg viewBox="0 0 24 24" class="ic"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Back
+                </button>
+                <button type="button" class="btn btn--primary" onclick="goStep(3)">
+                    Next: Administration
+                    <svg viewBox="0 0 24 24" class="ic"><path d="M14 5l7 7m0 0l-7 7m7-7H3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+        </fieldset>
+
+        <!-- Step 3: Administration -->
+        <fieldset class="fieldset step-panel" id="step3">
+            <legend class="fieldset-legend">Administration</legend>
+            <div class="field-grid">
+                <div class="field">
+                    <label asp-for="ApprovedBy" class="field-label"></label>
+                    <input asp-for="ApprovedBy" class="field-input" placeholder="Director name" />
+                </div>
+                <div class="field">
+                    <label asp-for="Status" class="field-label"></label>
+                    <div class="field-select-wrap">
+                        <select asp-for="Status" class="field-input field-select">
+                            <option value="Active">Active</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Suspended">Suspended</option>
+                        </select>
+                        <svg viewBox="0 0 24 24" class="sel-arrow"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                </div>
+                <div class="field field--span2">
+                    <label asp-for="Comment" class="field-label"></label>
+                    <textarea asp-for="Comment" class="field-input field-ta" rows="3" placeholder="Optional remark to appear on the certificate..."></textarea>
+                </div>
+            </div>
+            <div class="step-nav">
+                <button type="button" class="btn btn--outline" onclick="goStep(2)">
+                    <svg viewBox="0 0 24 24" class="ic"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Back
+                </button>
+                <button type="submit" class="btn btn--primary btn--lg">
+                    <svg viewBox="0 0 24 24" class="ic"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                    Create Certificate
+                </button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
