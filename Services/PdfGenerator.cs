@@ -11,7 +11,8 @@ public class PdfGenerator
     private readonly byte[] _signature;
     private readonly byte[] _qrCode;
 
-    private const string Font = "Times New Roman";
+    // Liberation Serif is metrically identical to Times New Roman (available on Linux)
+    private static readonly string Font = OperatingSystem.IsLinux() ? "Liberation Serif" : "Times New Roman";
     private const float Body = 12f;
     private const float Spacing = 1.5f;
 
@@ -47,8 +48,13 @@ public class PdfGenerator
                     // ── LETTERHEAD BANNER (logo + university name) ──
                     col.Item().Image(_letterhead).FitWidth();
 
+                    // ── Directorate line ──
+                    col.Item().PaddingTop(2).AlignCenter()
+                        .Text("Directorate for Admissions and Academic Records")
+                        .FontSize(9).Italic();
+
                     // ── Contact info lines ──
-                    col.Item().PaddingTop(4).AlignCenter()
+                    col.Item().PaddingTop(2).AlignCenter()
                         .Text("Mobile Phone : (+250)724 796 996 / 724 474 805/ 788 473 035")
                         .FontSize(9);
 
